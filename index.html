@@ -30,6 +30,13 @@ h1{font-family:'Dancing Script',cursive,serif;font-size:clamp(2.2rem,8vw,3.6rem)
 background:linear-gradient(135deg,var(--pink),#ff4fa0);box-shadow:0 8px 0 #c93a7f,0 14px 24px rgba(0,0,0,.3);animation:beat 1.4s infinite;transition:transform .1s}
 #open:active{transform:translateY(6px);box-shadow:0 2px 0 #c93a7f}
 @keyframes beat{50%{transform:scale(1.07)}}
+.count{margin-top:22px;padding:14px 16px;border-radius:22px;background:rgba(255,255,255,.14);border:2px solid rgba(255,194,221,.6);backdrop-filter:blur(3px);box-shadow:0 8px 24px rgba(40,10,90,.3)}
+.ct{font-family:'Dancing Script',cursive,serif;font-size:1.5rem;color:#fff;text-shadow:0 2px 0 var(--p1)}
+.cb{display:flex;gap:10px;justify-content:center;margin-top:8px}
+.cb div{min-width:64px;padding:8px 6px;border-radius:14px;background:rgba(255,255,255,.9);color:var(--p1)}
+.cb b{display:block;font-size:1.6rem;line-height:1.1;font-variant-numeric:tabular-nums}
+.cb small{font-size:.72rem;color:var(--pink);font-weight:700}
+@media (max-width:380px){.cb{gap:6px}.cb div{min-width:56px}.cb b{font-size:1.35rem}}
 .overlay{position:fixed;inset:0;z-index:10;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(40,15,80,.7);backdrop-filter:blur(4px)}
 .overlay.show{display:flex;animation:fade .4s}
 @keyframes fade{from{opacity:0}}
@@ -94,6 +101,7 @@ border:5px solid var(--pink2);box-shadow:0 20px 60px rgba(0,0,0,.5);animation:po
   </svg>
 
   <button id="open">💌 Ábreme</button>
+  <div class="count"><div class="ct">Siendo noviecitas desde hace 💕</div><div class="cb"><div><b id="cd">0</b><small>días</small></div><div><b id="ch">0</b><small>horas</small></div><div><b id="cm">0</b><small>minutos</small></div><div><b id="cs">0</b><small>segundos</small></div></div></div>
 </main>
 
 <div class="overlay" id="ov" role="dialog" aria-modal="true">
@@ -158,6 +166,14 @@ else blip(450,850,0,.28);}catch(e){}}
 document.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>pop(b.id==='open'?'open':b.id==='close'?'close':'tap')));
 const sign=document.querySelector('.sign'),tools=document.getElementById('tools'),ask=document.getElementById('ask');
 document.getElementById('close').onclick=()=>{letter.style.display='none';sign.style.display='none';tools.style.display='none';ask.hidden=false;};
+/* Contador: 30 de mayo de 2026, 18:00 hora de Canarias (UTC+1) */
+const START=Date.UTC(2026,4,30,17,0,0);
+function updCount(){const t=Math.max(0,Math.floor((Date.now()-START)/1000));
+document.getElementById('cd').textContent=Math.floor(t/86400);
+document.getElementById('ch').textContent=Math.floor(t/3600)%24;
+document.getElementById('cm').textContent=Math.floor(t/60)%60;
+document.getElementById('cs').textContent=t%60;}
+updCount();setInterval(updCount,1000);
 let celebrating=false;
 function celebrate(){if(celebrating)return;celebrating=true;pop('open');
 [72,76,79,84,88,91,96,91,96].forEach((m,i)=>setTimeout(()=>{try{note(m,.9,.2)}catch(e){}},i*110));
